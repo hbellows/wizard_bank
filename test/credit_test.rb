@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/pride'
-require 'person'
+require './lib/credit'
+require './lib/person'
 
 class CreditTest < Minitest::Test
 
@@ -8,7 +9,7 @@ class CreditTest < Minitest::Test
     amex = Credit.new('AMEX')
     person = Person.new('Luna', 2000)
 
-    assert_equal , amex.open_credit(person, 1000, 0.05)
+    assert_equal 'Luna', amex.open_credit(person, 1000, 0.05)
   end
 
 end
