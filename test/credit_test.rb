@@ -9,7 +9,21 @@ class CreditTest < Minitest::Test
     amex = Credit.new('AMEX')
     person = Person.new('Luna', 2000)
 
-    assert_equal 'Luna', amex.open_credit(person, 1000, 0.05)
+    amex.open_credit(person, 1000, 0.05)
+
+    assert_equal 'Luna', amex.account_holders.keys.join
+    assert_equal 1000, amex.account_holders[person.name][:balance]
+    assert_equal 0.05, amex.account_holders[person.name][:apr]
+  end
+
+  def test_it_can_track_spending
+    citi = Credit.new('Citi')
+    person = Person.new('Hermione', 2500)
+
+    citi.open_credit(person, 1000, 0.05)
+    require "pry"; binding.pry
+
+    assert_equal 100, citi.cc_spend(person, 100)
   end
 
 end
