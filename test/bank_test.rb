@@ -110,6 +110,7 @@ class BankTest < Minitest::Test
     end
 
     def test_it_can_halt_transfers_to_unopened_accounts
+      skip
       bank_1 = Bank.new('The Silver Sickle')
       bank_2 = Bank.new('The Bronze Knut')
       person = Person.new('Hagrid', 2000)
@@ -122,21 +123,51 @@ class BankTest < Minitest::Test
       assert_equal result, bank_1.transfer(person, bank_2, 500)
     end
 
-    def test_it_can_provide_bank_total_cash
-      bank = Bank.new('Gingot\'s')
+    def test_it_can_calculate_total_cash_deposits
+      # skip
+      bank_1 = Bank.new('Gingot\'s')
+      bank_2 = Bank.new('The Silver Sickle')
       # require "pry"; binding.pry
-      person_1 = Person.new('Hermione', 500)
+      person_1 = Person.new('Hermione', 1000)
       person_2 = Person.new('Harry', 500)
-      person_3 = Person.new('Hagrid', 1000)
+      person_3 = Person.new('Hagrid', 1500)
 
-      bank.open_account(person_1)
-      bank.open_account(person_2)
-      bank.open_account(person_3)
+      bank_1.open_account(person_1)
+      bank_1.open_account(person_2)
+      bank_1.open_account(person_3)
 
-      bank.deposit(person_1, 250)
-      bank.deposit(person_2, 250)
-      bank.deposit(person_3, 500)
+      bank_1.deposit(person_1, 250)
+      bank_1.deposit(person_2, 250)
+      bank_1.deposit(person_3, 500)
 
-      assert_equal 1000, bank.total_cash
+      assert_equal 1000, bank_1.total_cash
+      refute_equal 1000, bank_2.total_cash
+    end
+
+    def test_it_can_calculate_total_cash
+      # skip
+      bank_1 = Bank.new('Gingot\'s')
+      bank_2 = Bank.new('The Bronze Knut')
+      # require "pry"; binding.pry
+      person_1 = Person.new('Jenny', 1000)
+      person_2 = Person.new('Luna', 1500)
+
+      bank_1.open_account(person_1)
+      bank_1.open_account(person_2)
+
+      bank_1.deposit(person_1, 250)
+      bank_1.deposit(person_2, 250)
+
+      bank_2.open_account(person_2)
+      bank_2.deposit(person_2, 250)
+
+      assert_equal 500, bank_1.total_cash
+
+      bank_1.withdrawl(person_1, 100)
+      assert_equal 400, bank_1.total_cash
+
+      bank_1.transfer(person_2, bank_2, 100)
+      assert_equal 300, bank_1.total_cash
+      assert_equal 350, bank_2.total_cash
     end
 end

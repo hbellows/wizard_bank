@@ -1,5 +1,5 @@
 class Bank
-  attr_reader :bank_name
+  attr_reader :bank_name, :total_cash
 
   def initialize(bank_name)
     @bank_name = bank_name
@@ -11,10 +11,12 @@ class Bank
   end
 
   def deposit(person, amt)
+    # require "pry"; binding.pry
     if person.cash < amt
        "#{person.name} does not have enough cash to perfom this deposit."
     else
       person.accounts[bank_name] += amt
+      @total_cash += amt
       person.cash -= amt
     end
   end
@@ -24,6 +26,7 @@ class Bank
       "Insufficient funds."
     else
       person.accounts[bank_name] -= amt
+      @total_cash -= amt
       person.cash += amt
     end
   end
@@ -34,12 +37,13 @@ class Bank
     elsif person.accounts[bank_name] < amt
       "Insufficient funds."
     else
-      person.accounts[bank_name] -= amt
-      person.accounts[xfer_bank.bank_name] += amt
+      require "pry"; binding.pry
+      withdrawl(person, amt)
+      # person.accounts[bank_name] -= amt
+      # @total_cash -= amt
+      # person.accounts[xfer_bank.bank_name] += amt
+      xfer_bank.deposit(person, amt)
     end
   end
 
-  def total_cash
-
-  end
 end
